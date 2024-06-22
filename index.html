@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>调查问卷</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+        }
+
+        h3 {
+            margin-top: 40px;
+            color: #333;
+        }
+
+        .el-radio-group {
+            margin-top: 10px;
+        }
+
+        .el-radio {
+            margin-bottom: 15px;
+        }
+    </style>
+    <!-- 引入vue框架 -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.7.0/vue.min.js"></script>
+    <!-- 引入饿了么组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h3>20个维度：</h3>
+        <p>
+            {{ dimensions }}
+        </p>
+        <h3>随机抽取5个维度：</h3>
+        <p>
+            {{ list }}
+        </p>
+        <h3>请选出你倾向的答案：</h3>
+        <el-radio-group v-model="radio">
+            <template v-for="(item,i) in items">
+                <el-radio :label="item" :key="i"></el-radio><br>
+            </template>
+        </el-radio-group>
+        <p>
+            <el-button @click="genTwoItems" size="small" icon="el-icon-refresh">刷新</el-button>
+            <el-button type="primary" @click="showResult" size="small" icon="el-icon-check">提交</el-button>
+        </p>
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data: function () {
+                return {
+                    curQuestion: 0, //待使用
+                    radio: '',
+                    items: [],
+                    dimensions: [
+                        ['男', '女'],
+                        ['小轿车', '货车', '火车'],
+                        ['苹果', '香蕉', '橙子', '梨'],
+                        ['北京', '上海', '广州', '深圳'],
+                        ['春天', '夏天', '秋天', '冬天'],
+                        ['篮球', '足球', '排球', '乒乓球'],
+                        ['红色', '蓝色', '绿色', '黄色'],
+                        ['春节', '国庆节', '元旦', '中秋节'],
+                        ['钢笔', '圆珠笔', '铅笔', '马克笔'],
+                        ['数学', '语文', '英语', '物理'],
+                        ['猫', '狗', '鸟', '鱼'],
+                        ['茶', '咖啡', '果汁', '牛奶'],
+                        ['电视', '电脑', '手机', '平板'],
+                        ['电影', '电视剧', '动漫', '综艺节目'],
+                        ['上海话', '北京话', '粤语', '英语'],
+                        ['上班', '下班', '休息', '出差'],
+                        ['书桌', '椅子', '床', '沙发'],
+                        ['快递', 'EMS', '邮政', '顺丰'],
+                        ['QQ', '微信', '微博', '豆瓣']
+                    ],
+                }
+            },
+            computed: {
+                // 随机生成5个维度
+                list() {
+                    // 这个代码首先使用 slice(0) 方法创建一个原始数组的副本，然后使用 sort() 方法将副本数组随机排序，最后使用 slice(0, 10) 方法截取前 10 个元素作为结果数组。
+                    return this.dimensions.slice(0).sort(() => Math.random() - 0.5).slice(0, 5);
+                }
+            },
+            mounted() {
+                // 页面加载后，先生成一遍两个选项
+                this.genTwoItems()
+            },
+            methods: {
+                // 根据5个维度，生成两组选项
+                genTwoItems() {
+                    // 5个数组中，每一个随机抽取一个元素，生成一个新数组：[女,小轿车,数学,上班,春节]
+                    let firstItem = this.list.map(_arr => _arr[Math.floor(Math.random() * _arr.length)]).join(' ')
+                    let secondItem = this.list.map(_arr => _arr[Math.floor(Math.random() * _arr.length)]).join(' ')
+                    this.items = [firstItem, secondItem]
+                },
+                showResult() {
+                    alert(this.radio)
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>
